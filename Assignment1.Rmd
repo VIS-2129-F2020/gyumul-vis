@@ -1,0 +1,241 @@
+---
+title: "Assignment 1"
+author: "Gianina Yumul"
+date: "9/9/2020"
+output: html_document
+---
+```{r}
+library(tidycensus)
+library(tidyverse)
+library(magrittr)
+library(prettydoc)
+library(ggthemes)
+library(ggplot2)
+library(wesanderson)
+```
+
+```{r}
+vars <- c(tot_hh = "H001001",
+           tot_rural_hh = "H002005",
+           tot_rent_hh = "H004004",
+           avg_hh_size = "H012001",
+           tot_pop = "P003001",
+           nh_white_pop = "P005003",
+           nh_black_pop = "P005004",
+           nh_asian_pop = "P005006",
+           hispanic_pop = "P005010",
+           med_age = "P013001")
+```
+
+```{r}
+AL_tracts <- get_decennial(geography = "tract", variables = vars,
+                           state = "CA", county = "Alameda",
+                           output = "wide") %>%
+  mutate(rural = (tot_rural_hh == tot_hh) ,
+         pct_rental = tot_rent_hh / tot_hh,
+         majority_race_eth = case_when(
+           nh_white_pop / tot_pop > 0.5 ~ "nh_white",
+           nh_black_pop / tot_pop > 0.5 ~ "nh_black",
+           nh_asian_pop / tot_pop > 0.5 ~ "nh_asian",
+           hispanic_pop / tot_pop > 0.5 ~ "hispanic",
+           (nh_white_pop + nh_black_pop + nh_asian_pop + hispanic_pop) /tot_pop < 0.5 ~ "other",
+           TRUE ~ "no_majority")) %>%
+  filter(tot_pop > 0, tot_hh > 0) %>%
+  select(GEOID, rural, majority_race_eth, 
+         pct_rental, avg_hh_size, tot_pop, med_age) 
+```
+
+<!-- This is graph #1. -->
+```{r}
+ggplot(AL_tracts, 
+       aes(x = pct_rental,
+           y = avg_hh_size,
+           color = majority_race_eth)) +
+  geom_bin2d() +
+  scale_x_continuous(name = "Percent of households in rented homes",
+                     breaks = seq(0, 1, by = 0.1),
+                     labels = paste(seq(0, 100, by = 10), "%", sep = "")) +
+  scale_y_continuous(name = "Average Household Size",
+                     breaks = seq(0, 6, by = 1)) +
+  scale_color_discrete(name = "Majority race/ethnicity",
+                       labels = c("Hispanic",
+                                  "Non-Hispanic Asian",
+                                  "Non-Hispanic black",
+                                  "Non-Hispanic white",
+                                  "No majority")) +
+  theme_tufte() 
+```
+This is graph #2.
+
+```{r}
+ggplot(AL_tracts, 
+       aes(x = 1 - pct_rental,
+           y = med_age,
+           color = majority_race_eth,
+           fill = majority_race_eth)) +
+  geom_point(alpha  = 1/10) +
+  stat_smooth(method = "lm") +
+  scale_x_continuous(name = "Percent of households in mortgaged/owned homes",
+                     breaks = seq(0, 1, by = 0.1),
+                     labels = paste(seq(0, 100, by = 10), "%", sep = "")) +
+  scale_y_continuous(name = "Median age within tract",
+                     breaks = seq(10, 80, by = 10)) +
+  scale_color_brewer(name = "Majority race/ethnicity",
+                       labels = c("Hispanic",
+                                  "Non-Hispanic Asian",
+                                  "Non-Hispanic black",
+                                  "Non-Hispanic white",
+                                  "No majority")) +
+  scale_fill_brewer(name = "Majority race/ethnicity",
+                       labels = c("Hispanic",
+                                  "Non-Hispanic Asian",
+                                  "Non-Hispanic black",
+                                  "Non-Hispanic white",
+                                  "No majority")) +
+  theme_classic()
+```
+
+This is graph #3.
+```{r}
+ggplot(AL_tracts, 
+       aes(x = med_age,
+           y = tot_pop)) +
+  geom_point(color = wes_palette(n = 1, name = "GrandBudapest2")) +
+  stat_smooth(color = wes_palette(n = 1, name = "GrandBudapest2"), linetype = 2, size = 0.5) +
+  scale_x_continuous(name = "Median age of tract") +
+  scale_y_continuous(name = "Tract population") +
+  theme_solarized() 
+```
+
+This is graph #4.
+
+```{r}
+ggplot(AL_tracts[which(AL_tracts$majority_race_eth == 'nh_white'),], 
+       aes(x = med_age,
+           y = avg_hh_size)) +
+  geom_jitter(color = wes_palette(n = 1, name = "Moonrise2")) +
+  scale_x_continuous(name = "Percent of households in rented homes",
+                     breaks = seq(0, 100, by = 10),
+                     labels = paste(seq(0, 100, by = 10), "%", sep = "")) +
+  scale_y_continuous(name = "Average Household Size",
+                     breaks = seq(0, 6, by = 1)) +
+  theme_tufte() 
+```
+
+This is graph #5.
+```{r}
+ggplot(AL_tracts, 
+       aes(x = majority_race_eth,
+           y = med_age)) +
+  geom_tufteboxplot() +
+  scale_x_discrete(name = "Majority race/ethnicity",
+                       labels = c("Hispanic",
+                                  "Non-Hispanic Asian",
+                                  "Non-Hispanic black",
+                                  "Non-Hispanic white",
+                                  "No majority")) +
+  scale_y_continuous(name = "Median age within tract",
+                     breaks = seq(0, 100, by = 10)) +
+  theme_tufte() 
+```
+
+This is graph #6.
+```{r}
+ggplot(AL_tracts, 
+       aes(x = majority_race_eth,
+           y = med_age,
+           color = majority_race_eth)) +
+  geom_point(position = "jitter",
+             size = 0.5,
+             alpha = 0.5) +
+  scale_x_discrete(name = "Majority race/ethnicity",
+                       labels = c("Hispanic",
+                                  "Non-Hispanic Asian",
+                                  "Non-Hispanic black",
+                                  "Non-Hispanic white",
+                                  "No majority")) +
+  scale_y_continuous(name = "Median age within tract",
+                     breaks = seq(10, 80, by = 10)) +
+  theme_bw() +
+  theme(legend.position = "none")
+```
+
+This is graph #7.
+```{r}
+ggplot(AL_tracts, 
+       aes(x = majority_race_eth,
+           y = 1 - pct_rental,
+           color = majority_race_eth)) +
+  geom_boxplot(fill='#FFA07A', color="darkred") +
+  scale_x_discrete(name = "MAJORITY RACE/ETHNICITY",
+                       labels = c("Hispanic",
+                                  "Non-Hispanic\nAsian",
+                                  "Non-Hispanic\nblack",
+                                  "Non-Hispanic\nwhite",
+                                  "No majority")) +
+  scale_y_continuous(name = "Percent of homes mortgaged/owned",
+                     labels = scales::percent) +
+  theme_economist() +
+  theme(legend.position = "none")
+```
+
+This is graph #8.
+
+```{r}
+ggplot(AL_tracts, 
+       aes(x = majority_race_eth,
+           y = avg_hh_size,
+           color = majority_race_eth)) +
+  geom_violin() +
+  scale_color_colorblind() +
+  coord_flip() +
+  stat_summary(fun.y=mean, geom = "point", shape = 23, size = 2) +
+  scale_x_discrete(name = "Majority race/ethnicity",
+                       labels = c("Hispanic",
+                                  "Non-Hispanic Asian",
+                                  "Non-Hispanic black",
+                                  "Non-Hispanic white",
+                                  "No majority")) +
+  scale_y_continuous(name = "Average household size within tract",
+                     breaks = seq(0, 4, by = 1)) +
+  theme_bw() +
+  theme(legend.position = "none")
+```
+
+
+This is graph #9.
+```{r}
+ggplot(AL_tracts, aes(x = ceiling(avg_hh_size), fill = majority_race_eth)) +
+  geom_bar(position = "fill") +
+  scale_color_colorblind() +
+  scale_y_continuous(name = "percent of tracts",
+                     labels = scales::percent) +
+  scale_x_discrete(name = "Household Size",
+                    labels = c("1","2","3","4")) +
+  scale_fill_discrete(name = element_blank(),
+                        labels = c("Hispanic",
+                                  "Non-Hispanic\nAsian",
+                                  "Non-Hispanic\nBlack",
+                                  "Non-Hispanic\nwhite",
+                                  "No majority")) +
+  theme_bw() 
+```
+
+
+This is graph #10.
+```{r}
+ggplot(AL_tracts, aes(x = pct_rental, fill = majority_race_eth)) +
+  geom_bar() +
+  scale_color_colorblind()+
+  scale_y_continuous(name = "Number of tracts") +
+  scale_x_discrete(name = "Majority race/ethnicity",
+                       labels = c("Hispanic",
+                                  "Non-Hispanic\nAsian",
+                                  "Non-Hispanic\nwhite",
+                                  "No majority")) +
+  scale_fill_discrete(name = element_blank(),
+                        labels = c("Urban tracts",
+                                   "Rural tracts")) +
+  theme_bw() 
+```
+
