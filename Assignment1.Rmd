@@ -24,6 +24,7 @@ vars <- c(tot_hh = "H001001",
            nh_black_pop = "P005004",
            nh_asian_pop = "P005006",
            hispanic_pop = "P005010",
+           
            med_age = "P013001")
 ```
 
@@ -143,7 +144,7 @@ This is graph #6.
 ```{r}
 ggplot(AL_tracts, 
        aes(x = majority_race_eth,
-           y = med_age,
+           y = avg_hh_size,
            color = majority_race_eth)) +
   geom_point(position = "jitter",
              size = 0.5,
@@ -154,8 +155,8 @@ ggplot(AL_tracts,
                                   "Non-Hispanic black",
                                   "Non-Hispanic white",
                                   "No majority")) +
-  scale_y_continuous(name = "Median age within tract",
-                     breaks = seq(10, 80, by = 10)) +
+  scale_y_continuous(name = "Average household size",
+                     breaks = seq(0, 5, by = 1)) +
   theme_bw() +
   theme(legend.position = "none")
 ```
