@@ -1,20 +1,44 @@
 ---
 title: "Assignment 1"
 author: "Gianina Yumul"
-date: "9/9/2020"
+date: "9/14/2020"
 output: html_document
 ---
 ```{r}
 library(tidycensus)
 library(tidyverse)
 library(magrittr)
-library(prettydoc)
 library(ggthemes)
 library(ggplot2)
 library(wesanderson)
 ```
 
+Variables pulled from ACS 5-year community data:
+
+1. Majority racial/ethnic identity (categorical)
+2. Citizenship status (categorical)
+3. Median age (continuous)
+4. Average household size (continuous)
+5. Percent of households who live in rented homes (continuous)
+6. Population of tract (continuous)
+
 ```{r}
+<<<<<<< HEAD
+vars <- c(tot_hh = "B08137_001E",
+           tot_rent_hh = "B08137_003E",
+           avg_hh_size = "B25010_001E",
+           tot_pop = "B02001_001E",
+           nh_white_pop = "B02001_002E",
+           nh_black_pop = "B02001_003E",
+           nh_asian_pop = "B02001_005E",
+           hispanic_pop = "B01001I_001E",
+           tot_cs_all = "B05001_001E",
+           tot_cs_bornus = "B05001_002E",
+           tot_cs_bornpr = "B05001_003E",
+           tot_cs_nat = "B05001_005E",
+           tot_cs_none = "B05001_006E",
+           med_age = "B01002_001E")
+=======
 vars <- c(tot_hh = "H001001",
            tot_rural_hh = "H002005",
            tot_rent_hh = "H004004",
@@ -26,14 +50,20 @@ vars <- c(tot_hh = "H001001",
            hispanic_pop = "P005010",
            
            med_age = "P013001")
+>>>>>>> 9cf80514130c5dc0906a62588407d9c70ac0e5c3
 ```
 
+I obtained data for tracts in Alameda County, CA.
+
 ```{r}
-AL_tracts <- get_decennial(geography = "tract", variables = vars,
+AL_tracts <- get_acs(geography = "tract", variables = vars,
                            state = "CA", county = "Alameda",
                            output = "wide") %>%
-  mutate(rural = (tot_rural_hh == tot_hh) ,
-         pct_rental = tot_rent_hh / tot_hh,
+  mutate(pct_rental = tot_rent_hh / tot_hh,
+         pct_bornus = tot_cs_bornus / tot_cs_all,
+         pct_bornpr = tot_cs_bornpr / tot_cs_all,
+         pct_nat = tot_cs_nat / tot_cs_all,
+         pct_none = tot_cs_none / tot_cs_all,
          majority_race_eth = case_when(
            nh_white_pop / tot_pop > 0.5 ~ "nh_white",
            nh_black_pop / tot_pop > 0.5 ~ "nh_black",
@@ -42,11 +72,14 @@ AL_tracts <- get_decennial(geography = "tract", variables = vars,
            (nh_white_pop + nh_black_pop + nh_asian_pop + hispanic_pop) /tot_pop < 0.5 ~ "other",
            TRUE ~ "no_majority")) %>%
   filter(tot_pop > 0, tot_hh > 0) %>%
-  select(GEOID, rural, majority_race_eth, 
-         pct_rental, avg_hh_size, tot_pop, med_age) 
+  select(GEOID, majority_race_eth, 
+         pct_rental, avg_hh_size, tot_pop, med_age, pct_bornus, pct_bornpr, pct_nat, pct_none) 
 ```
 
-<!-- This is graph #1. -->
+This is graph #1. This graph shows average household size as a function of the percent of households in rented homes in each tract. The fill shows the majority race/ethnicity of each tract along with a count for the number of observations represented by each dot.
+
+I don't think this is a particularly good graph. It is quite hard to read and it takes time to adjust to. After playing with geom_bin2d function, I would like to keep it in my future 'toolbox' and think about scenarios in which using both the outline and fill of a point in a scatterplot to communicate something might be appropriate.
+
 ```{r}
 ggplot(AL_tracts, 
        aes(x = pct_rental,
@@ -66,7 +99,8 @@ ggplot(AL_tracts,
                                   "No majority")) +
   theme_tufte() 
 ```
-This is graph #2.
+
+This is graph #2. This graph shows median age within a tract as a function of the percent of households in mortgaged/owned homes, along with trendlines for each majority race/ethnicity. Conceptually, this is very similar to my first chart. One new aspect I wanted to explore in this chart was the possibility of using gradations of a single color to communicate trends within each of these subgroups.
 
 ```{r}
 ggplot(AL_tracts, 
@@ -96,7 +130,8 @@ ggplot(AL_tracts,
   theme_classic()
 ```
 
-This is graph #3.
+This is graph #3. I believe this graph shows a lack of strong correlation between a tract's population and the median age of the tract. The outliers interest me in this representation; in particular, I was curious about the six tracts where the median age was less than 25 and the tract populations varied between 1250 and 9000.  
+
 ```{r}
 ggplot(AL_tracts, 
        aes(x = med_age,
@@ -105,25 +140,28 @@ ggplot(AL_tracts,
   stat_smooth(color = wes_palette(n = 1, name = "GrandBudapest2"), linetype = 2, size = 0.5) +
   scale_x_continuous(name = "Median age of tract") +
   scale_y_continuous(name = "Tract population") +
+  ggtitle("Median Age of ACS Tracts", subtitle = "Alameda County, CA") +
   theme_solarized() 
 ```
 
-This is graph #4.
+This is graph #4. In this graph, I show average household size as a function of the percentage of US-born citizens within tracts. The chart shows that, in general, the average household size decreases as the percentage of US-born citizens within a tract increases.
 
 ```{r}
-ggplot(AL_tracts[which(AL_tracts$majority_race_eth == 'nh_white'),], 
-       aes(x = med_age,
+ggplot(AL_tracts,
+       aes(x = pct_bornus,
            y = avg_hh_size)) +
   geom_jitter(color = wes_palette(n = 1, name = "Moonrise2")) +
-  scale_x_continuous(name = "Percent of households in rented homes",
-                     breaks = seq(0, 100, by = 10),
-                     labels = paste(seq(0, 100, by = 10), "%", sep = "")) +
+  scale_x_continuous(name = "Percent of US-born Citizens",
+                     labels = scales::percent) +
   scale_y_continuous(name = "Average Household Size",
                      breaks = seq(0, 6, by = 1)) +
+  stat_smooth(method = "lm") +
+  ggtitle("Household Size vs. Percent of US-born Citizens", subtitle = "Alameda County, CA") +
   theme_tufte() 
 ```
 
-This is graph #5.
+This is graph #5, taking full advantage of the Tufte themes. This graph shows the median age of households in tracts with a majority race/ethnicity. The 50th percentile for each majority race/ethnicity category is prominent and is easy to comparee across categories.
+
 ```{r}
 ggplot(AL_tracts, 
        aes(x = majority_race_eth,
@@ -137,17 +175,23 @@ ggplot(AL_tracts,
                                   "No majority")) +
   scale_y_continuous(name = "Median age within tract",
                      breaks = seq(0, 100, by = 10)) +
+  ggtitle("Median Age of Households in Tracts \nwith a Majority Race/Ethnicity", subtitle = "Alameda County, CA") +
   theme_tufte() 
 ```
 
-This is graph #6.
+This is graph #6, which shows the percentage of naturalized citizens in tracts with a majority race/ethnicity. One thing I found interesting about this representation is that it illustrates that the non-Hispanic Asian category had the widest spread and highest maximum value of naturalized citizens within a tract, with one tract nearing 50% naturalized citizens within its population.
+
 ```{r}
 ggplot(AL_tracts, 
        aes(x = majority_race_eth,
+<<<<<<< HEAD
+           y = pct_nat,
+=======
            y = avg_hh_size,
+>>>>>>> 9cf80514130c5dc0906a62588407d9c70ac0e5c3
            color = majority_race_eth)) +
   geom_point(position = "jitter",
-             size = 0.5,
+             size = 1.5,
              alpha = 0.5) +
   scale_x_discrete(name = "Majority race/ethnicity",
                        labels = c("Hispanic",
@@ -155,13 +199,19 @@ ggplot(AL_tracts,
                                   "Non-Hispanic black",
                                   "Non-Hispanic white",
                                   "No majority")) +
+<<<<<<< HEAD
+  scale_y_continuous(name = "Percentage of Naturalized Citizens",
+                     labels = scales::percent) +
+=======
   scale_y_continuous(name = "Average household size",
                      breaks = seq(0, 5, by = 1)) +
+>>>>>>> 9cf80514130c5dc0906a62588407d9c70ac0e5c3
   theme_bw() +
+  ggtitle("Percentage of Naturalized Citizens \nin Tracts with a Majority Race/Ethnicity", subtitle = "Alameda County, CA") +
   theme(legend.position = "none")
 ```
 
-This is graph #7.
+This is graph #7, which shows the percentage of homes mortgaged/owned in tracts with a majority race/ethnic group. Like the Tufte-inspired graph above, I thought these boxplots were clear and easy to compare across groups.
 ```{r}
 ggplot(AL_tracts, 
        aes(x = majority_race_eth,
@@ -177,10 +227,11 @@ ggplot(AL_tracts,
   scale_y_continuous(name = "Percent of homes mortgaged/owned",
                      labels = scales::percent) +
   theme_economist() +
+  ggtitle("Percentage of Homes Mortgaged/Owned \nin Tracts with a Majority Race/Ethnic Group", subtitle = "Alameda County, CA")
   theme(legend.position = "none")
 ```
 
-This is graph #8.
+This is graph #8. I used a violin plot to compare average household size between tracts with a majority race/ethnic group.
 
 ```{r}
 ggplot(AL_tracts, 
@@ -204,7 +255,7 @@ ggplot(AL_tracts,
 ```
 
 
-This is graph #9.
+This is graph #9, a stacked bar graph that shows the relative percentages of majority race/ethnic groups with average household sizes of between 1 and 4.
 ```{r}
 ggplot(AL_tracts, aes(x = ceiling(avg_hh_size), fill = majority_race_eth)) +
   geom_bar(position = "fill") +
@@ -223,20 +274,19 @@ ggplot(AL_tracts, aes(x = ceiling(avg_hh_size), fill = majority_race_eth)) +
 ```
 
 
-This is graph #10.
+This is graph #10. This scatter plot shows the percentage of homes mortgaged/owned as a function of the percentage of non-citizens within a tract.
 ```{r}
-ggplot(AL_tracts, aes(x = pct_rental, fill = majority_race_eth)) +
-  geom_bar() +
-  scale_color_colorblind()+
-  scale_y_continuous(name = "Number of tracts") +
-  scale_x_discrete(name = "Majority race/ethnicity",
-                       labels = c("Hispanic",
-                                  "Non-Hispanic\nAsian",
-                                  "Non-Hispanic\nwhite",
-                                  "No majority")) +
-  scale_fill_discrete(name = element_blank(),
-                        labels = c("Urban tracts",
-                                   "Rural tracts")) +
-  theme_bw() 
+ggplot(AL_tracts,
+       aes(x = pct_none,
+           y = pct_rental, color = majority_race_eth)) +
+  geom_jitter(color = wes_palette(n = 1, name = "Moonrise2")) +
+  scale_x_continuous(name = "Percent of Non-US Citizens",
+                     labels = scales::percent) +
+  scale_y_continuous(name = "Percent of Homes Mortgaged/Owned",
+                     labels = scales::percent) +
+  stat_smooth(method = "lm") +
+  ggtitle("Household Size vs. Percent of Non-US Citizens", subtitle = "Alameda County, CA") +
+  theme_tufte() 
+  
 ```
 
