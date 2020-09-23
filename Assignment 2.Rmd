@@ -1,0 +1,157 @@
+---
+title: "Assignment 2 - Final"
+author: "Gianina Yumul"
+date: "9/22/2020"
+output: html_document
+html_document:
+    theme: cosmo
+    toc: true
+    toc_depth: 3
+    toc_float: true
+---
+```{r}
+library(ggplot2)
+library(sf)
+library(rnaturalearth)
+library(rnaturalearthdata)
+library(rnaturalearthhires)
+library(rgeos)
+library(tidyverse)
+library(ggspatial)
+library(cartogram)
+library(ggthemes)
+library(readr)
+
+#Assignment description: Create a map of the area, with its associated subareas, using each of three different map projections. Indicate the map projection you've used for each. Identify a variable and use at least three different methods to show how it varies along the subareas.
+
+```
+
+
+```{r}
+US_states <- ne_states(country = "United States of America", returnclass = "sf") %>%
+  filter(name != "Alaska",
+         name != "Hawaii")
+
+US_map <- ggplot(US_states) +
+  geom_sf() +
+  theme_bw()
+```
+
+Added the following projections (source = spatialreference.org):
+
+"USGS_EDC" - The USA Contiguous Lambert Azmuthal Equal Area (USGS-EDC) Projection. (https://spatialreference.org/ref/sr-org/6903/)
+"AUS_MERC" - The Ahughes Australian Mercator (https://spatialreference.org/ref/epsg/3514/)
+"ARG_BI" - The Argentina Bicontinental - South Pole Stereographic (https://spatialreference.org/ref/sr-org/7098/) 
+
+```{r}
+#creating different projection options
+USGS_EDC <- "+proj=laea +lat_0=45 +lon_0=-100 +x_0=0 +y_0=0 +a=6370997 +b=6370997 +units=m +no_defs"
+AUS_MERC <- "+proj=utm +zone=54 +south +ellps=aust_SA +units=m +no_defs "
+ARG_BI <- "+proj=stere +lat_0=-90 +lat_ts=-90 +lon_0=-63 +k=1 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs "
+```
+
+```{r}
+ggplot(US_states) +
+  geom_sf() +
+  coord_sf(crs = USGS_EDC) +
+  theme_bw()
+```
+```{r}
+#Inspired by the projections Kristy H. shared with us in class.
+ggplot(US_states) +
+  geom_sf() +
+  coord_sf(crs = AUS_MERC) +
+  theme_bw()
+```
+```{r}
+ggplot(US_states) +
+  geom_sf() +
+  coord_sf(crs = ARG_BI) +
+  theme_bw()
+```
+
+```{r}
+states_transformed <- US_states %>%
+  st_transform(crs = USGS_EDC)
+
+ggplot(states_transformed) +
+  geom_sf() +
+  theme_bw()
+```
+The variable I chose to explore was Median Household Income by State. The data originally comes from the 2018 ACS 1-Year Survey. I used a .csv file created by another Github user in my analysis.
+
+```{r}
+#Inspired by Ana Z's Canvas discussion post
+urlfile="https://raw.githubusercontent.com/Ajstanley89/State-of-Healthcare/master/assets/data/data.csv"
+income_data <- read.csv(url(urlfile))
+head(income_data)
+income_states <-states_transformed %>%
+  left_join(income_data, by = c("postal" = "abbr")) %>%
+  select(name, state, income, poverty, age, incomeMoe, id)
+```
+
+```{r}
+#legend.position code inspired by Ignacio L.
+ggplot(income_states, aes(fill = income)) +
+  geom_sf(color = "lightblue") +
+  scale_fill_viridis_c(
+    guide = "colourbar", aesthetics = "fill", 
+    name = "Thousands of Dollars",
+    breaks = seq(30000, 80000, by = 5000),
+    labels = formatC(seq(30000, 80000, by = 5000), 
+                     big.mark = ",", format = "f", digits = 0)) +
+  ggtitle("                 Median Household Income by State") +
+  theme_map() +
+  theme(legend.background = element_blank(),
+        legend.position = "left")
+```
+
+```{r}
+income_centeroids <- income_states %>%
+  st_centroid()
+
+ggplot(states_transformed) +
+  geom_sf(fill = NA, color = "black") +
+  geom_sf(data = income_centeroids, 
+          aes(size = income),
+          alpha = 0.2, color = "chartreuse3") +
+  scale_size_continuous(name = "Median Income by State",
+    breaks = seq(100000, 500000, by = 100000),
+    labels = formatC(seq(100000, 500000, by = 100000), 
+                     big.mark = ",", format = "f", digits = 0),
+    range = c(0, 20)) +
+    ggtitle(label = "Median Household Income by State in Thousands of Dollars", "Minimum (Mississippi): $39680, Maximum (Maryland): $73971") +
+    theme(plot.title = element_text(hjust = 0.5)) +
+  theme_void() 
+```
+```{r}
+income_cartogram_ncont <- income_states %>%
+  cartogram_ncont("age")
+
+ggplot(income_cartogram_ncont, aes(fill = income)) +
+  geom_sf(color = NA) +
+  scale_fill_viridis_c(
+    name = "Median Household Income by State in Thousands of Dollars",
+    breaks = seq(100000, 500000, by = 100000),
+    labels = formatC(seq(100000, 500000, by = 100000), 
+                     big.mark = ",", format = "f", digits = 0)) +
+   ggtitle(label = "Median Household Income by State in Thousands of Dollars", "Minimum (Mississippi): $39680, Maximum (Maryland): $73971") +
+  theme_map() +
+  theme(legend.background = element_blank(), legend.position = "left")
+```
+```{r}
+income_cartogram_cont <- income_states %>%
+  cartogram_cont("income")
+
+ggplot(income_cartogram_cont, aes(fill = income)) +
+  geom_sf(color = NA) +
+  scale_fill_viridis_c(
+    name = "Median Household Income by State in Thousands of Dollars",
+    breaks = seq(100000, 500000, by = 100000),
+    labels = formatC(seq(100000, 500000, by = 100000), 
+                     big.mark = ",", format = "f", digits = 0)) +
+   ggtitle(label = "Median Household Income by State in Thousands of Dollars", "Minimum (Mississippi): $39680, Maximum (Maryland): $73971") +
+  theme_map() +
+  theme(legend.background = element_blank())
+```
+
