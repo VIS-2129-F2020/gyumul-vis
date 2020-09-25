@@ -156,10 +156,10 @@ nhoods <- nhoods %>%
 ggplot(nhoods) +
   geom_sf(color = NA,
           aes(fill = num_parks)) +
-  scale_fill_viridis_c(name = "NYC neighborhoods\nby number of parks",
-                       breaks = breaks <- seq(0, 13000, by = 1000),
-                       labels = paste(prettyNum(breaks, big.mark = ","),
-                                      "parks")) +
+  #scale_fill_viridis_c(name = "NYC neighborhoods\nby number of parks",
+                       #breaks = breaks <- seq(0, 13000, by = 1000),
+                       #labels = paste(prettyNum(breaks, big.mark = ","),
+                                      #"parks")) +
   annotation_scale(location = "br") +
   annotation_north_arrow(location = "tr",
                          style = north_arrow_minimal()) +
@@ -177,10 +177,10 @@ nhoods <- nhoods %>%
 ggplot(nhoods) +
   geom_sf(color = NA,
           aes(fill = num_poi)) +
-  scale_fill_viridis_c(name = "NYC neighborhoods\nby number of points of interest",
-                       breaks = breaks <- seq(0, 200, by = 20),
-                       labels = paste(prettyNum(breaks, big.mark = ","),
-                                      "points of interest")) +
+  #scale_fill_viridis_c(name = "NYC neighborhoods\nby number of points of interest",
+                       #breaks = breaks <- seq(0, 200, by = 20),
+                       #labels = paste(prettyNum(breaks, big.mark = ","),
+                                      #"points of interest")) +
   annotation_scale(location = "br") +
   annotation_north_arrow(location = "tr",
                          style = north_arrow_minimal()) +
@@ -188,11 +188,6 @@ theme_map() +
   theme(legend.background = element_rect(fill = alpha("white", 0.5),
                                          color = "gray"))
 ```
-
-```{r}
-view(nhoods)
-```
-
 ##Map 4
 What is the average density of subway entrances in each neighborhood?
 ```{r}
@@ -253,10 +248,10 @@ theme_map() +
 ##Map 6
 How far is each point of interest from a subway entrance? (ask in section)
 ```{r}
-poi <- poi %>%
-  mutate(subway_dist = st_nn(poi, subway, 
-                           returnDist = TRUE)$dist) %>%
-  mutate(subway_dist = as.numeric(subway_dist))
+#poi <- poi %>%
+  #mutate(subway_dist = st_nn(poi, subway, 
+                           #returnDist = TRUE)$dist) %>%
+  #mutate(subway_dist = as.numeric(subway_dist))
 
 ```
 
