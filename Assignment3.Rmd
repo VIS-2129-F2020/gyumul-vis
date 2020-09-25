@@ -151,7 +151,7 @@ How many parks are there in each NYC neighborhood? (ask in section)
 
 ```{r}
 nhoods <- nhoods %>%
-  mutate(num_parks = length(st_covers(nhoods, parks)))
+  mutate(num_parks = lengths(st_covers(nhoods, parks)))
 
 ggplot(nhoods) +
   geom_sf(color = NA,
@@ -167,12 +167,16 @@ theme_map() +
   theme(legend.background = element_rect(fill = alpha("white", 0.5),
                                          color = "gray"))
 ```
+#Taelor's Comments 
+- Here you're treating parks as points instead of polygons which seems to work, but I would also try using the tutorial code that overlaps polygons.  
+
+- Your issues in maps 2, 3 and 4 were stemming from the fact that you were using length instead of lengths in your mutate functions. It was litterally driving me crazy, but its a super easy fix and all of your breaks and labels should work now once you put in the correct values. 
 
 ##Map 3
 How many points of interest are there in each NYC neighborhood? (ask in section)
 ```{r}
 nhoods <- nhoods %>%
-  mutate(num_poi = length(st_covers(nhoods, poi)))
+  mutate(num_poi = lengths(st_covers(nhoods, poi)))
 
 ggplot(nhoods) +
   geom_sf(color = NA,
@@ -192,7 +196,7 @@ theme_map() +
 What is the average density of subway entrances in each neighborhood?
 ```{r}
 nhoods <- nhoods %>%
-  mutate(num_subway = length(st_covers(nhoods, subway)))
+  mutate(num_subway = lengths(st_covers(nhoods, subway)))
 
 nhoods <- nhoods %>%
   mutate(area = set_units(st_area(nhoods), km^2)) %>%
@@ -214,10 +218,6 @@ theme_map() +
     legend.background = element_rect(fill = alpha("white", 0.5), 
                                          color = "gray"))
 ```
-```{r}
-view(nhoods)
-```
-
 ##Map 5
 What is the average density of points of interest in each park? (ask in section)
 ```{r}
