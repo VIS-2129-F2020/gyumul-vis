@@ -1,0 +1,262 @@
+---
+title: "Assignment3"
+author: "Gianina Yumul"
+date: "9/24/2020"
+output: html_document
+html_document:
+    theme: cosmo
+    toc: true
+    toc_depth: 3
+    toc_float: true
+
+---
+
+##Assignment Brief
+
+Creative Assignment 3: Identify a municipal open data portal and find two point layers (A and B) and two polygon layers (C and D). Calculate six of 22 possible metrics, and illustrate the results of each calculation with a map. Each of the four layers you selected should appear in at least one of theose six maps.
+
+```{r}
+#Declare libraries while suppressing outputs.
+library(sf, quietly = TRUE, warn.conflicts = FALSE)
+library(tidyverse, quietly = TRUE, warn.conflicts = FALSE)
+library(ggthemes, quietly = TRUE, warn.conflicts = FALSE)
+library(ggspatial, quietly = TRUE, warn.conflicts = FALSE)
+library(units, quietly = TRUE, warn.conflicts = FALSE)
+library(nngeo, quietly = TRUE, warn.conflicts = FALSE)
+```
+
+##Grabbing Data
+
+```{r}
+#From NYC Open Data.
+
+#NYC Parks (polygons)
+parks <- st_read("https://data.cityofnewyork.us/api/geospatial/g84h-jbjm?method=export&format=KML", quiet = TRUE)
+
+#NYC Neighborhood (polygons)
+nhoods <- st_read("https://data.cityofnewyork.us/api/geospatial/cpf4-rkhq?method=export&format=KML", quiet = TRUE)
+
+#NYC Points of Interest (points)
+poi <- st_read("https://data.cityofnewyork.us/api/geospatial/rxuy-2muj?method=export&format=KML", quiet = TRUE)
+
+#NYC Subway Entrances
+subway <- st_read("https://data.cityofnewyork.us/api/geospatial/drex-xx56?method=export&format=KML", quiet = TRUE)
+
+```
+
+##Transforming Data
+```{r}
+#Transforming using the EPSG 2263 projection for New York.
+NY_state_plane <- "+proj=lcc +lat_1=41.03333333333333 +lat_2=40.66666666666666 +lat_0=40.16666666666666 +lon_0=-74 +x_0=300000.0000000001 +y_0=0 +ellps=GRS80 +datum=NAD83 +to_meter=0.3048006096012192 +no_defs"
+
+parks <- parks %>%
+  st_transform(NY_state_plane)
+
+nhoods <- nhoods %>%
+  st_transform(NY_state_plane)
+
+poi <- poi %>%
+  st_transform(NY_state_plane)
+
+subway <- subway %>%
+  st_transform(NY_state_plane)
+```
+
+##All Data Mapped
+```{r}
+ggplot(parks) +
+  geom_sf(fill = "darkolivegreen4", color = NA) +
+  geom_sf(data = subway, color = "dodgerblue4", size = 0.01) +
+  geom_sf(data = poi, color = "darkorange", size = 0.01) +
+  geom_sf(data = nhoods, fill = NA, color = "gray") +
+  theme_map() +
+  annotation_scale()
+```
+##Map 1
+How many points of interest in New York City are within 400 meters of a subway entrance?
+
+Note: I chose 400 because that's roughly 5 Manhattan blocks, or a 5-minute walk.
+
+```{r}
+subway_buffer <- st_buffer(subway, dist = 400) %>%
+  st_union()
+
+ggplot(subway_buffer) +
+  geom_sf() +
+  theme_map()
+
+poi_subway <- poi[subway_buffer,]
+
+ggplot(subway_buffer) +
+  geom_sf() +
+  geom_sf(data = poi_subway,
+          color = "darkgreen",
+          size = 0.01) +
+  theme_map()
+
+poi <- poi %>%
+  st_join(poi_subway) %>%
+  mutate(by_subway = !is.na(Name.y))
+
+n_subway_poi <- sum(poi$by_subway)
+
+n_subway_poi
+
+#Returns 1905. There are 1905 points of interest within 400 meters of a subway entrance in NYC.
+```
+
+```{r}
+n_poi <- length(poi$by_subway)
+
+pct_subway_poi <- n_subway_poi / n_poi
+
+pct_subway_poi
+
+#Returns 0.0926106. About 9% of the points of interest in NYC are within a 5-minute walk (400 meters) of a subway entrance. 
+```
+
+```{r}
+left_side  <- st_bbox(subway)$xmin
+top_side <- st_bbox(subway)$ymax
+
+ggplot(nhoods) +
+  geom_sf(fill = "gainsboro", color = NA) +
+  geom_sf(data = poi, size = 0.01,
+          aes(color = by_subway)) +
+  scale_color_manual(values = c("aquamarine", "aquamarine4"),
+          name = "Points of Interest\nby distance to a subway entrance", 
+          labels = c("No subway entrance within 400 m",
+                     "Subway entrance within 400 m")) +
+  annotation_scale(location = "br") +
+  annotation_north_arrow(location = "tr",
+                         style = north_arrow_minimal()) +
+  annotate(geom = "text", x = left_side, 
+           y = top_side, 
+           label = paste("Of the ", 
+                         prettyNum(n_poi, big.mark = ","),
+                         " points of interest in New York City,\n", 
+                         prettyNum(n_subway_poi, big.mark = ","),
+                         " (", 
+                         prettyNum(100*pct_subway_poi, digits = 0),
+                         "%) are within 400 meters of \na subway entrance.",
+                         sep = ""),
+           hjust = 0, vjust = 0, size = 3) +
+  theme_map() +
+  theme(panel.background = element_rect(fill = "aliceblue"),
+        legend.background = element_rect(fill = alpha("white", 0.5), 
+                                         color = "gray"))
+```
+##Map 2
+How many parks are there in each NYC neighborhood? (ask in section)
+
+```{r}
+nhoods <- nhoods %>%
+  mutate(num_parks = length(st_covers(nhoods, parks)))
+
+ggplot(nhoods) +
+  geom_sf(color = NA,
+          aes(fill = num_parks)) +
+  scale_fill_viridis_c(name = "NYC neighborhoods\nby number of parks",
+                       breaks = breaks <- seq(0, 13000, by = 1000),
+                       labels = paste(prettyNum(breaks, big.mark = ","),
+                                      "parks")) +
+  annotation_scale(location = "br") +
+  annotation_north_arrow(location = "tr",
+                         style = north_arrow_minimal()) +
+theme_map() +
+  theme(legend.background = element_rect(fill = alpha("white", 0.5),
+                                         color = "gray"))
+```
+
+##Map 3
+How many points of interest are there in each NYC neighborhood? (ask in section)
+```{r}
+nhoods <- nhoods %>%
+  mutate(num_poi = length(st_covers(nhoods, poi)))
+
+ggplot(nhoods) +
+  geom_sf(color = NA,
+          aes(fill = num_poi)) +
+  scale_fill_viridis_c(name = "NYC neighborhoods\nby number of points of interest",
+                       breaks = breaks <- seq(0, 200, by = 20),
+                       labels = paste(prettyNum(breaks, big.mark = ","),
+                                      "points of interest")) +
+  annotation_scale(location = "br") +
+  annotation_north_arrow(location = "tr",
+                         style = north_arrow_minimal()) +
+theme_map() +
+  theme(legend.background = element_rect(fill = alpha("white", 0.5),
+                                         color = "gray"))
+```
+
+```{r}
+view(nhoods)
+```
+
+##Map 4
+What is the average density of subway entrances in each neighborhood?
+```{r}
+nhoods <- nhoods %>%
+  mutate(num_subway = length(st_covers(nhoods, subway)))
+
+nhoods <- nhoods %>%
+  mutate(area = set_units(st_area(nhoods), km^2)) %>%
+  mutate(subway_dens = as.numeric(num_subway / area))
+
+ggplot(nhoods) +
+  geom_sf(color = NA, 
+          aes(fill = subway_dens)) +
+    scale_fill_viridis_c(name = 
+                           "NYC neighborhoods\nby subway entrance density",
+                       breaks = breaks <- seq(0, 400, by = 100),
+                       labels = paste(prettyNum(breaks, big.mark = ","),
+                                      "subway entrances per square km")) +
+  annotation_scale(location = "br") +
+  annotation_north_arrow(location = "tr",
+                         style = north_arrow_minimal()) +
+theme_map() +
+  theme(legend.position = "right",
+    legend.background = element_rect(fill = alpha("white", 0.5), 
+                                         color = "gray"))
+```
+```{r}
+view(nhoods)
+```
+
+##Map 5
+What is the average density of points of interest in each park? (ask in section)
+```{r}
+parks <- parks %>%
+  mutate(num_poi = length(st_covers(parks, poi)))
+
+parks <- parks %>%
+  mutate(area = set_units(st_area(parks), km^2)) %>%
+  mutate(poi_dens = as.numeric(num_poi / area))
+
+ggplot(parks) +
+  geom_sf(color = NA, 
+          aes(fill = poi_dens)) +
+    scale_fill_viridis_c(name = 
+                           "NYC parks\nby point of interest density",
+                       breaks = breaks <- seq(0, 350, by = 50),
+                       labels = paste(prettyNum(breaks, big.mark = ","),
+                                      "points of interest per square km")) +
+  annotation_scale(location = "br") +
+  annotation_north_arrow(location = "tr",
+                         style = north_arrow_minimal()) +
+theme_map() +
+  theme(legend.position = c(0.5,0),
+    legend.background = element_rect(fill = alpha("white", 0.5), 
+                                         color = "gray"))
+```
+
+##Map 6
+How far is each point of interest from a subway entrance? (ask in section)
+```{r}
+poi <- poi %>%
+  mutate(subway_dist = st_nn(poi, subway, 
+                           returnDist = TRUE)$dist) %>%
+  mutate(subway_dist = as.numeric(subway_dist))
+
+```
+
