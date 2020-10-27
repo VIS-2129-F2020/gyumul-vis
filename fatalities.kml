@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.0">
+<Document>
+<Placemark>
+<name>2017-04-30 03:19:11</name>
+<description>bike</description>
+<Point><coordinates>-71.0761623946188,42.3526441694761,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2020-08-11 00:27:23</name>
+<description>mv</description>
+<Point><coordinates>-71.1104122009513,42.2718654702672,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2016-04-30 11:33:01</name>
+<description>mv</description>
+<Point><coordinates>-71.0694285511364,42.3562310643404,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2016-08-13 23:07:01</name>
+<description>ped</description>
+<Point><coordinates>-71.0829687564756,42.3121886516022,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2016-08-24 05:17:44</name>
+<description>ped</description>
+<Point><coordinates>-71.0707882839653,42.3365176053435,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2015-11-04 15:26:24</name>
+<description>ped</description>
+<Point><coordinates>-71.075316998029,42.3420028515189,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2015-01-21 20:08:47</name>
+<description>ped</description>
+<Point><coordinates>-71.1000705645264,42.3227794320856,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2018-07-08 01:23:59</name>
+<description>mv</description>
+<Point><coordinates>-71.0709493485961,42.3037318365113,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2018-06-06 12:50:00</name>
+<description>ped</description>
+<Point><coordinates>-71.1344718778327,42.3484270338546,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2015-11-24 19:07:26</name>
+<description>mv</description>
+<Point><coordinates>-71.010389940573,42.3854980267353,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2017-12-20 14:20:38</name>
+<description>ped</description>
+<Point><coordinates>-71.0645648563648,42.3466358340015,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2016-02-18 20:40:41</name>
+<description>ped</description>
+<Point><coordinates>-71.086233732464,42.3181766059888,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2017-11-03 13:53:29</name>
+<description>bike</description>
+<Point><coordinates>-71.0676265702916,42.3212635612614,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2019-02-05 16:10:15</name>
+<description>ped</description>
+<Point><coordinates>-71.1558423975798,42.2856885710159,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2015-06-06 23:03:15</name>
+<description>bike</description>
+<Point><coordinates>-71.085755587062,42.2775508928956,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2015-06-06 23:19:42</name>
+<description>ped</description>
+<Point><coordinates>-71.0967702378589,42.3145767024144,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2017-07-30 08:02:04</name>
+<description>mv</description>
+<Point><coordinates>-71.1307332595002,42.2310343287396,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2017-01-01 06:01:43</name>
+<description>ped</description>
+<Point><coordinates>-71.0323958013506,42.37808547566,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2017-03-10 23:49:55</name>
+<description>ped</description>
+<Point><coordinates>-71.077435764461,42.3361462980533,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2019-04-28 01:29:16</name>
+<description>mv</description>
+<Point><coordinates>-71.0937348309224,42.2687023156379,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2016-04-10 19:45:43</name>
+<description>mv</description>
+<Point><coordinates>-71.0890277313845,42.3076387559169,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2015-12-03 18:18:40</name>
+<description>ped</description>
+<Point><coordinates>-71.118519602163,42.3515549020919,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2016-11-28 22:59:25</name>
+<description>mv</description>
+<Point><coordinates>-71.0200251374285,42.3848168221491,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2015-07-30 23:05:45</name>
+<description>mv</description>
+<Point><coordinates>-71.0757917449895,42.3834201769591,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2019-02-14 01:12:33</name>
+<description>mv</description>
+<Point><coordinates>-71.1615143364637,42.2577264869566,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2016-01-24 11:18:03</name>
+<description>ped</description>
+<Point><coordinates>-71.0567153856428,42.3175868498504,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2019-09-11 20:47:39</name>
+<description>ped</description>
+<Point><coordinates>-71.0509834662712,42.3504913062261,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2016-10-25 12:18:52</name>
+<description>ped</description>
+<Point><coordinates>-71.099113079579,42.3149675432526,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2020-09-06 16:59:05</name>
+<description>mv</description>
+<Point><coordinates>-71.0470679522195,42.3397292261936,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2019-05-05 01:12:23</name>
+<description>mv</description>
+<Point><coordinates>-71.0049791936386,42.3872207355806,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2016-04-16 22:15:32</name>
+<description>ped</description>
+<Point><coordinates>-71.0068490153877,42.3866972431663,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2016-10-14 12:33:48</name>
+<description>mv</description>
+<Point><coordinates>-71.1190138037236,42.2725084957619,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2015-08-15 02:23:48</name>
+<description>mv</description>
+<Point><coordinates>-71.0567177357719,42.3502271994751,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2015-06-12 07:20:40</name>
+<description>mv</description>
+<Point><coordinates>-71.0566615891518,42.3682270768367,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2015-08-07 07:05:28</name>
+<description>bike</description>
+<Point><coordinates>-71.0894836662669,42.3508580718265,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2018-07-03 14:50:20</name>
+<description>mv</description>
+<Point><coordinates>-71.0610452743175,42.3223734519016,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2015-09-12 03:13:04</name>
+<description>mv</description>
+<Point><coordinates>-71.1161471602017,42.2960404455713,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2017-05-29 20:33:04</name>
+<description>ped</description>
+<Point><coordinates>-71.0724544304053,42.343525575639,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2015-05-19 22:01:12</name>
+<description>bike</description>
+<Point><coordinates>-71.0771734927182,42.2917573307297,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2018-01-12 16:00:51</name>
+<description>ped</description>
+<Point><coordinates>-71.0881347734684,42.3481180472712,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2015-04-25 21:49:27</name>
+<description>mv</description>
+<Point><coordinates>-71.0675915556677,42.3276578900156,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2016-01-12 16:41:34</name>
+<description>ped</description>
+<Point><coordinates>-71.1384434168425,42.2770643395462,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2016-09-28 01:27:06</name>
+<description>mv</description>
+<Point><coordinates>-71.0214970730994,42.3834702581827,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2015-07-11 01:42:38</name>
+<description>ped</description>
+<Point><coordinates>-71.1294296080045,42.3527436532444,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2018-11-29 23:51:54</name>
+<description>ped</description>
+<Point><coordinates>-71.0420399597509,42.3355168258428,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2019-04-24 01:59:18</name>
+<description>ped</description>
+<Point><coordinates>-71.0214970730994,42.3834702581827,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2016-01-13 08:05:05</name>
+<description>ped</description>
+<Point><coordinates>-71.0743323353344,42.2999637334445,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2018-07-25 15:13:52</name>
+<description>ped</description>
+<Point><coordinates>-71.0352998883045,42.3331457965505,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2018-02-08 22:31:13</name>
+<description>ped</description>
+<Point><coordinates>-71.0881347734684,42.3481180472712,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2018-10-10 18:20:26</name>
+<description>mv</description>
+<Point><coordinates>-71.083310817899,42.2834574994296,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2016-12-08 22:25:05</name>
+<description>ped</description>
+<Point><coordinates>-71.0698253978513,42.3303360792854,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2017-02-25 09:46:58</name>
+<description>mv</description>
+<Point><coordinates>-71.0696335335975,42.2899648575072,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2015-05-07 10:34:13</name>
+<description>ped</description>
+<Point><coordinates>-71.0938021006493,42.2699663256768,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2015-07-17 19:54:07</name>
+<description>mv</description>
+<Point><coordinates>-71.1525738288187,42.2655273086705,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2017-09-20 21:18:34</name>
+<description>ped</description>
+<Point><coordinates>-71.0810501899638,42.3328841377695,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2020-07-25 17:34:28</name>
+<description>mv</description>
+<Point><coordinates>-71.0554974965323,42.3418401247323,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2016-12-31 02:08:40</name>
+<description>mv</description>
+<Point><coordinates>-71.1067813297886,42.2877421853353,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2019-08-25 20:34:53</name>
+<description>ped</description>
+<Point><coordinates>-71.0629805181474,42.3194322260329,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2016-12-16 16:52:48</name>
+<description>ped</description>
+<Point><coordinates>-71.0946065770495,42.2678637906838,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2018-11-07 07:06:09</name>
+<description>ped</description>
+<Point><coordinates>-71.1584313799487,42.2601630036402,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2015-04-09 20:01:19</name>
+<description>ped</description>
+<Point><coordinates>-71.0721241968683,42.332547160004,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2020-03-16 14:54:47</name>
+<description>ped</description>
+<Point><coordinates>-71.0734209940864,42.3335909521113,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2020-06-09 07:33:54</name>
+<description>bike</description>
+<Point><coordinates>-71.1006532507357,42.2704879331178,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2016-08-25 16:50:16</name>
+<description>ped</description>
+<Point><coordinates>-71.0870484576717,42.2981232314924,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2017-01-25 10:20:41</name>
+<description>ped</description>
+<Point><coordinates>-71.1295934442348,42.2872046749404,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2019-07-25 23:24:32</name>
+<description>ped</description>
+<Point><coordinates>-71.0723977945724,42.3870831415267,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2015-09-23 17:11:49</name>
+<description>mv</description>
+<Point><coordinates>-71.0620580852185,42.3440427447996,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2015-07-03 22:38:02</name>
+<description>ped</description>
+<Point><coordinates>-71.0825102121349,42.3338261487398,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2017-04-09 18:33:45</name>
+<description>mv</description>
+<Point><coordinates>-71.1101684046473,42.270494011993,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2020-01-07 20:41:11</name>
+<description>ped</description>
+<Point><coordinates>-71.0721241968683,42.332547160004,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2016-11-18 23:44:42</name>
+<description>ped</description>
+<Point><coordinates>-71.0774851146675,42.3139376967333,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2018-07-13 11:36:47</name>
+<description>ped</description>
+<Point><coordinates>-71.0655374703314,42.3486324133515,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2016-04-23 13:18:42</name>
+<description>ped</description>
+<Point><coordinates>-71.0628662661067,42.3488092208143,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2015-11-08 15:25:35</name>
+<description>ped</description>
+<Point><coordinates>-71.0664164895301,42.2724110278695,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2020-04-22 09:10:26</name>
+<description>bike</description>
+<Point><coordinates>-71.0751287786173,42.334970453129,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2019-03-09 12:21:50</name>
+<description>ped</description>
+<Point><coordinates>-71.0385124838526,42.3737459481812,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2017-01-07 17:47:05</name>
+<description>ped</description>
+<Point><coordinates>-71.1083515818336,42.3318544331607,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2019-03-20 20:38:28</name>
+<description>ped</description>
+<Point><coordinates>-71.0810501899638,42.3328841377695,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2017-12-22 04:49:18</name>
+<description>mv</description>
+<Point><coordinates>-71.098390266271,42.324941585782,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2016-07-07 18:03:52</name>
+<description>ped</description>
+<Point><coordinates>-71.0628966343699,42.3421675993232,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2017-02-22 15:51:48</name>
+<description>ped</description>
+<Point><coordinates>-71.0721241968683,42.332547160004,0</coordinates></Point>
+</Placemark>
+<Placemark>
+<name>2016-11-08 09:59:32</name>
+<description>bike</description>
+<Point><coordinates>-71.1467364131628,42.3503102174777,0</coordinates></Point>
+</Placemark>
+</Document>
+</kml>
